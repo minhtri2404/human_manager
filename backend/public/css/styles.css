@@ -1,0 +1,14 @@
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .sidebar {
+    flex: 0 0 250px; /* Độ rộng cố định */
+    height: 100vh;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+  }
+  
