@@ -4,7 +4,7 @@ const employeeController = require('../controllers/employeeController')
 const authMiddleware = require('../middleware/authMiddleware')
 
 
-router.get('/list', authMiddleware, employeeController.getAllEmployees);
+router.get('/', authMiddleware, employeeController.getAllEmployee)
 router.post('/add', authMiddleware, employeeController.addEmployee)
 
 

@@ -1,34 +1,134 @@
 <template>
-  <v-container class="pa-6">
+  <v-container>
     <v-row justify="center">
-      <v-col cols="12" class="text-center">
-        <h3 class="text-h5 font-weight-bold">Manage Employee</h3>
-      </v-col>
-    </v-row>
+      <v-col cols="12" md="10">
+        <!-- Tiêu đề-->
+        <div class="text-center my-4">
+          <h2>Manager Employee</h2>
+        </div>
 
-    <!-- Thanh tìm kiếm và nút -->
-    <v-row class="mb-4" justify="space-between" align="center">
-      <v-col cols="12" md="4">
-        <v-text-field
-          v-model="search"
-          label="Search by Name"
-          dense
-          hide-details
-        />
-      </v-col>
+        <!-- Thanh tìm kiếm và nút thêm -->
+        <v-row class="mb-4" justify="space-between" align="center">
+          <v-col cols="6" md="4">
+            <v-text-field v-model="search" label="Search by Name" dense hide-details />
+          </v-col>
 
-      <v-col cols="12" md="4" class="text-right">
-        <RouterLink to="/admin-dashboard/add-employee">
-          <v-btn color="teal" dark> ADD NEW EMPLOYEE </v-btn>
-        </RouterLink>
+          <v-col cols="12" md="4" class="text-right">
+            <RouterLink to="/admin-dashboard/add-employee">
+              <v-btn color="teal" dark>ADD NEW EMPLOYEE</v-btn>
+            </RouterLink>
+          </v-col>
+        </v-row>
+
+        <!-- Bảng danh sách nhân viên -->
+        <v-data-table
+          :headers="headers"
+          :items="filteredEmployees"
+          :loading="loading"
+          loading-text="Loading employees..."
+          item-value="id"
+          class="elevation-1"
+        >
+          <template v-slot:item="{ item }">
+            <tr>
+              <td>{{ item.sno }}</td>
+              <td>{{ item.name }}</td>
+              <td>
+                <v-avatar size="30">
+                  <v-img :src="`http://localhost:4000/uploads/${item.profileImage}`" />
+                </v-avatar>
+              </td>
+              <td>{{ item.dep_name }}</td>
+              <td>{{ item.dob }}</td>
+              <td>
+                <v-btn size="small" color="green" @click="viewEmployee(item.id)">View</v-btn>
+                <v-btn size="small" color="orange">Salary</v-btn>
+                <v-btn size="small" color="teal">Leave</v-btn>
+                <v-btn size="small" color="blue" @click="editEmployee(item.id)">Edit</v-btn>
+                <v-btn size="small" color="red" @click="deleteEmployee(item.id)">Delete</v-btn>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
-
+const router = useRouter()
+const employees = ref([])
+const loading = ref(false)
 const search = ref('')
+
+const headers = [
+  { text: 'S.No', key: 'sno', width: '60px' },
+  { text: 'Name', key: 'name' },
+  { text: 'Image', key: 'profileImage' },
+  { text: 'Department', key: 'dep_name' },
+  { text: 'DOB', key: 'dob' },
+  { text: 'Action', key: 'action', sortable: false }
+]
+
+const fetchEmployees = async () => {
+  loading.value = true
+  try {
+    const res = await axios.get('http://localhost:4000/api/employees', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+
+    if (res && res.data && Array.isArray(res.data.data)) {
+      employees.value = res.data.data.map((emp, index) => ({
+        id: emp._id,
+        sno: index + 1,
+        name: emp.userId.name,
+        profileImage: emp.userId.profileImage,
+        dep_name: emp.department?.dep_name || 'N/A',
+        dob: new Date(emp.dob).toLocaleDateString()
+      }))
+    }
+  } catch (err) {
+    alert(err.response?.data?.error || 'Failed to fetch employees')
+  } finally {
+    loading.value = false
+  }
+}
+
+const viewEmployee = (id) => {
+  router.push(`/admin-dashboard/employee/${id}`)
+}
+
+const deleteEmployee = async (id) => {
+  const confirmed = confirm('Are you sure you want to delete this employee?')
+  if (confirmed) {
+    try {
+      await axios.delete(`http://localhost:4000/api/employees/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      fetchEmployees() // Reload
+    } catch (err) {
+      alert(err.response?.data?.error || 'Delete failed')
+    }
+  }
+}
+
+const filteredEmployees = computed(() => {
+  if (!search.value) return employees.value
+  return employees.value.filter(emp =>
+    emp.name.toLowerCase().includes(search.value.toLowerCase())
+  )
+})
+
+onMounted(fetchEmployees)
+
+
+
 </script>

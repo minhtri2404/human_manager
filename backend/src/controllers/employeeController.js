@@ -5,11 +5,11 @@ const upload = require('../middleware/uploadMiddleware')
 
 class EmployeeController {
 
-    getAllEmployees = async (req, res) => {
+    getAllEmployee = async (req, res) => {
         try {
             const employees = await Employee.find()
-                .populate('userId', 'name email role profileImage')
-                .populate('department', '_id');
+                .populate('userId', {password: 0})
+                .populate('department')
 
             res.status(200).json({ success: true, data: employees });
         } catch (error) {

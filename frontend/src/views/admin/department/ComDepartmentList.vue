@@ -58,9 +58,9 @@ const loading = ref(false)
 const search = ref('')
 
 const headers = [
-  { title: 'S No', key: 'sno' },
-  { title: 'Department', key: 'dep_name' },
-  { title: 'Actions', key: 'actions', sortable: false }
+  { title: 'S No', value: 'sno' },
+  { title: 'Department', value: 'dep_name' },
+  { title: 'Actions', value: 'actions', sortable: false }
 ]
 
 const fetchDepartments = async () => {
