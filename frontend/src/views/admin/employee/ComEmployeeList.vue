@@ -29,6 +29,14 @@
           item-value="id"
           class="elevation-1"
         >
+          <!-- HIỂN THỊ HEADER -->
+          <template v-slot:headers="{ columns }">
+            <tr>
+              <th v-for="column in columns" :key="column.key" :style="column.key === 'action' ? 'text-align: center' : ''">
+                {{ column.text }}
+              </th>
+            </tr>
+          </template>
           <template v-slot:item="{ item }">
             <tr>
               <td>{{ item.sno }}</td>
@@ -40,7 +48,7 @@
               </td>
               <td>{{ item.dep_name }}</td>
               <td>{{ item.dob }}</td>
-              <td>
+              <td class="text-center">
                 <v-btn size="small" color="green" @click="viewEmployee(item.id)">View</v-btn>
                 <v-btn size="small" color="orange">Salary</v-btn>
                 <v-btn size="small" color="teal">Leave</v-btn>
@@ -71,7 +79,7 @@ const headers = [
   { text: 'Image', key: 'profileImage' },
   { text: 'Department', key: 'dep_name' },
   { text: 'DOB', key: 'dob' },
-  { text: 'Action', key: 'action', sortable: false }
+  { text: 'Action', key: 'action' , sortable: false }
 ]
 
 const fetchEmployees = async () => {

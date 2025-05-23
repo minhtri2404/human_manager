@@ -29,6 +29,14 @@
           item-value="id"
           class="elevation-1"
         >
+        <template v-slot:headers="{ columns }">
+            <tr>
+              <th v-for="column in columns" :key="column.key" :style="column.key === 'action' ? 'text-align: center' : ''">
+                {{ column.text }}
+              </th>
+            </tr>
+          </template>
+
           <!-- Custom row -->
           <template v-slot:item="{ item }">
             <tr>
@@ -58,9 +66,9 @@ const loading = ref(false)
 const search = ref('')
 
 const headers = [
-  { title: 'S No', value: 'sno' },
-  { title: 'Department', value: 'dep_name' },
-  { title: 'Actions', value: 'actions', sortable: false }
+  { text: 'S No', key: 'sno' },
+  { text: 'Department', key: 'dep_name' },
+  { text: 'Actions', key: 'actions', sortable: false }
 ]
 
 const fetchDepartments = async () => {
