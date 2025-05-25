@@ -12,6 +12,7 @@ const EditDepartment = () => import('@/views/admin/department/ComEditDepartment.
 const Employee = () => import('@/views/admin/employee/ComEmployeeList.vue')
 const AddEmployee = () => import('@/views/admin/employee/ComAddEmployee.vue')
 const ViewEmployee = () => import('@/views/admin/employee/ComViewEmployee.vue')
+const EditEmployee = () => import('@/views/admin/employee/ComEditEmployee.vue')
 const routes = [
   {
     path: '/login',
@@ -59,6 +60,12 @@ const routes = [
         path: 'employee/:id',
         name: 'ViewEmployee',
         component: ViewEmployee,
+      },
+
+      {
+        path: 'employee/edit/:id',
+        name: 'EditEmployee',
+        component: EditEmployee,
       }
     ]
   },

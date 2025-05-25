@@ -112,6 +112,11 @@ const viewEmployee = (id) => {
   router.push(`/admin-dashboard/employee/${id}`)
 }
 
+const editEmployee = (id) => {
+  router.push(`/admin-dashboard/employee/edit/${id}`)
+
+}
+
 const deleteEmployee = async (id) => {
   const confirmed = confirm('Are you sure you want to delete this employee?')
   if (confirmed) {
