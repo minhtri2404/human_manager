@@ -6,6 +6,6 @@ const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/', authMiddleware, employeeController.getAllEmployee)
 router.post('/add', authMiddleware, employeeController.addEmployee)
-
+router.get('/:id', authMiddleware, employeeController.getViewEmployee)
 
 module.exports = router;

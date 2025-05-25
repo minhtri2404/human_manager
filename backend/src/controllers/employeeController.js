@@ -5,6 +5,7 @@ const upload = require('../middleware/uploadMiddleware')
 
 class EmployeeController {
 
+    //Xem toàn bộ danh sách nhân viên
     getAllEmployee = async (req, res) => {
         try {
             const employees = await Employee.find()
@@ -17,6 +18,7 @@ class EmployeeController {
         }
     };
 
+    // Thêm nhân viên
     addEmployee = async (req, res) => {
         upload(req, res, async (err) => {
             if (err) {
@@ -72,6 +74,19 @@ class EmployeeController {
                 return res.status(500).json({ success: false, message: 'Internal server error', error: error.message })
             }
         })
+    }
+
+    //Xem thông tin chi tiết của nhân viên
+    getViewEmployee = async(req, res) => {
+        try {
+            const {id} = req.params
+            const employee = await Employee.findById(id)
+                .populate('userId', {password: 0})
+                .populate('department')
+            return res.status(200).json({success: true, employee})
+        } catch (error) {
+            return res.status(500).json({success: false, message: 'Internal server error', error: error.message })
+        }
     }
 }
 module.exports = new EmployeeController()
