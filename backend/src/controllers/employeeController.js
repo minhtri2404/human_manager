@@ -90,38 +90,59 @@ class EmployeeController {
     }
 
      // Sửa thông tin của nhân viên
-    updateEmployee = async(req, res) => {
-        try {
-            const {id} = req.params
-            const { name, phone, designation, department, salary} = req.body
-
-            // Tìm nhân viên
-            const emp = await Employee.findById(id)
-            if (!emp) {
-                return res.status(404).json({success: false, message: "Employee not found" })
+   updateEmployee = async (req, res) => {
+        upload(req, res, async (err) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Image upload failed',
+                    error: err.message
+                });
             }
 
-            // Tìm người dùng liên kết
-            const user = await User.findById(emp.userId)
-            if (!user) {
-                return res.status(404).json({success: false, message: "User not found" })
+            try {
+                const { id } = req.params;
+                const { name, dob, salary, department } = req.body;
 
+                // Tìm nhân viên
+                const emp = await Employee.findById(id);
+                if (!emp) {
+                    return res.status(404).json({ success: false, message: 'Employee not found' });
+                }
+
+                // Tìm người dùng liên kết
+                const user = await User.findById(emp.userId);
+                if (!user) {
+                    return res.status(404).json({ success: false, message: 'User not found' });
+                }
+
+                // Cập nhật tên người dùng
+                user.name = name;
+                if (req.file) {
+                    user.profileImage = req.file.filename; // Nếu có ảnh mới
+                }
+                await user.save();
+
+                // Cập nhật thông tin nhân viên
+                emp.dob = dob;
+                emp.salary = salary;
+                emp.department = department;
+                await emp.save();
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'Employee updated successfully',
+                    employee: emp,
+                    user: user
+                });
+            } catch (error) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Internal server error',
+                    error: error.message
+                });
             }
-
-            // Cập nhật người dùng và nhân viên
-            const updateUser = await User.findByIdAndUpdate(emp.userId, { name }, { new: true });
-            const updateEmployee = await Employee.findByIdAndUpdate(id, {
-                phone, designation, salary, department
-            }, {new: true})
-
-            if (!updateEmployee || !updateUser) {
-                return res.status(404).json({success: false, message: "Failed to update records" })
-            }
-            return res.status(200).json({success: true, message: "Employee updated successfully ", updateEmployee, updateUser})
-        } catch (error) {
-            return res.status(500).json({success: false, message: 'Internal server error', error: error.message })
-
-        }
-    }
+        });
+    }; 
 }
 module.exports = new EmployeeController()
