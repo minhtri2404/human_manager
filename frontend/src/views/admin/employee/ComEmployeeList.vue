@@ -133,12 +133,12 @@ const deleteEmployee = async (id) => {
   }
 }
 
-const filteredEmployees = computed(() => {
-  if (!search.value) return employees.value
-  return employees.value.filter(emp =>
+const filteredEmployees = computed(() =>
+  employees.value.filter(emp =>
     emp.name.toLowerCase().includes(search.value.toLowerCase())
   )
-})
+);
+
 
 onMounted(fetchEmployees)
 
