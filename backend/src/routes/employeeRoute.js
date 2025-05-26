@@ -8,5 +8,6 @@ router.get('/', authMiddleware, employeeController.getAllEmployee)
 router.post('/add', authMiddleware, employeeController.addEmployee)
 router.get('/:id', authMiddleware, employeeController.getViewEmployee)
 router.put('/edit/:id', authMiddleware, employeeController.updateEmployee)
+router.delete('/:id', authMiddleware, employeeController.deleteEmployee)
 
 module.exports = router;

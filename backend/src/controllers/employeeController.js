@@ -2,6 +2,8 @@ const Employee = require('../models/employeeModel')
 const User = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const upload = require('../middleware/uploadMiddleware')
+const fs = require('fs') 
+const path = require('path')
 
 class EmployeeController {
 
@@ -143,6 +145,47 @@ class EmployeeController {
                 });
             }
         });
-    }; 
+    };
+
+    //Xóa nhân viên
+    deleteEmployee = async(req, res) => {
+        try {
+            const {id} = req.params
+
+            // Tìm nhân viên
+            const employee = await Employee.findById(id)
+            if (!employee){
+                return res.status(404).json({ success: false, message: 'Employee not found' });
+            }
+
+            //Tìm người dùng liên kết
+            const user = await User.findById(employee.userId)
+            if(user){
+                console.log("User:", user)
+                console.log("Ảnh profile:", user.profileImage)
+
+                if(user.profileImage){
+                    const imagePath = path.join(__dirname, '..', '..', 'public', 'uploads', user.profileImage);
+                    console.log("Đường dẫn ảnh cần xóa:", imagePath)
+
+                    if (fs.existsSync(imagePath)) {
+                        fs.unlinkSync(imagePath); // Xóa file ảnh
+                        console.log("==> Ảnh đã được xóa:", user.profileImage);
+                    } else{
+                        console.log("==> Ảnh KHÔNG tồn tại:", imagePath);
+
+                    }   
+                }
+                //Xóa người dùng
+                await User.findByIdAndDelete(employee.userId)
+            }
+
+            //Xóa nhân viên
+            await Employee.findByIdAndDelete(id)
+            return res.status(200).json({success: true, message: 'Xóa người dùng thành công'})
+        } catch (error) {
+            return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
+        }
+    }
 }
 module.exports = new EmployeeController()

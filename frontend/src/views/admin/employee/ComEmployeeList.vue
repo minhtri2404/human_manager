@@ -118,17 +118,21 @@ const editEmployee = (id) => {
 }
 
 const deleteEmployee = async (id) => {
-  const confirmed = confirm('Are you sure you want to delete this employee?')
-  if (confirmed) {
+  const confirmDelete = confirm('Bạn có muốn xóa phòng nhân viên này không')
+  if (confirmDelete) {
     try {
-      await axios.delete(`http://localhost:4000/api/employees/${id}`, {
+      const res = await axios.delete(`http://localhost:4000/api/employees/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       })
-      fetchEmployees() // Reload
-    } catch (err) {
-      alert(err.response?.data?.error || 'Delete failed')
+      if (res.data.success){
+        alert('Xóa thành công!')
+        // Cập nhật lại danh sách phòng ban sau khi xóa
+        await fetchEmployees()
+      }
+    } catch (error) {
+      alert('Có lỗi xảy ra khi xóa nhân viên!')
     }
   }
 }
