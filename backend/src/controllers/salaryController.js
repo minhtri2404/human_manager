@@ -5,8 +5,14 @@ class SalaryController {
         try {
             const {employeeId, basicSalary, allowances, deductions, payDate} = req.body
 
-            const totalSalary = parseInt(basicSalary) + parseInt(allowances) - parseInt(deductions)
-
+            // Kiểm tra đầu vào bắt buộc
+            if (!employeeId || !basicSalary || !payDate) {
+                return res.status(400).json({success: false, message: 'employeeId, basicSalary và payDate là bắt buộc'});
+            }
+            const totalSalary = parseFloat(
+                (parseFloat(basicSalary) + parseFloat(allowances) - parseFloat(deductions)).toFixed(2)
+            );
+            
             const newSalary = new Salary({
                 employeeId,
                 basicSalary,
