@@ -7,7 +7,7 @@ const salarySchema = new Schema({
     allowances: {type: Number},
     deductions: {type:Number},
     netSalary: {type: Number},
-    payDate: {type:Date, require: true},
+    payDate: {type:Date, required: true},
     createdAt:{type: Date, default: Date.now},
     updatedAt:{type: Date, default: Date.now}
 })
