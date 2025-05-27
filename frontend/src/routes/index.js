@@ -15,6 +15,7 @@ const ViewEmployee = () => import('@/views/admin/employee/ComViewEmployee.vue')
 const EditEmployee = () => import('@/views/admin/employee/ComEditEmployee.vue')
 
 const Salary = () => import('@/views/admin/salary/ComAddSalary.vue')
+const ViewSalary = () => import('@/views/admin/salary/ComViewSalary.vue')
 const routes = [
   {
     path: '/login',
@@ -74,7 +75,13 @@ const routes = [
         path: 'salary',
         name: 'Salary',
         component: Salary
-      }
+      },
+
+      {
+        path: 'employee/salary/:id',
+        name: 'ViewSalary',
+        component: ViewSalary
+      },
     ]
   },
 

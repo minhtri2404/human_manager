@@ -50,7 +50,7 @@
               <td>{{ item.dob }}</td>
               <td class="text-center">
                 <v-btn size="small" color="green" @click="viewEmployee(item.id)">View</v-btn>
-                <v-btn size="small" color="orange">Salary</v-btn>
+                <v-btn size="small" color="orange" @click="viewEmployeeSalary(item.id)">Salary</v-btn>
                 <v-btn size="small" color="teal">Leave</v-btn>
                 <v-btn size="small" color="blue" @click="editEmployee(item.id)">Edit</v-btn>
                 <v-btn size="small" color="red" @click="deleteEmployee(item.id)">Delete</v-btn>
@@ -108,13 +108,17 @@ const fetchEmployees = async () => {
   }
 }
 
+
 const viewEmployee = (id) => {
   router.push(`/admin-dashboard/employee/${id}`)
 }
 
 const editEmployee = (id) => {
   router.push(`/admin-dashboard/employee/edit/${id}`)
+}
 
+const viewEmployeeSalary = (id) => {
+  router.push(`/admin-dashboard/employee/salary/${id}`)
 }
 
 const deleteEmployee = async (id) => {
