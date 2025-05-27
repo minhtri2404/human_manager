@@ -41,9 +41,11 @@ app.use('/api/departments',departmentRouter);
 const employeeRoute = require('./src/routes/employeeRoute')
 app.use('/api/employees', employeeRoute)
 
+const salaryRoute = require('./src/routes/salaryRoute')
+app.use('/api/salarys', salaryRoute)
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to restaurant api' });
+    res.json({ message: 'Welcome' });
 });
 
 app.listen(port, () => {

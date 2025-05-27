@@ -13,6 +13,8 @@ const Employee = () => import('@/views/admin/employee/ComEmployeeList.vue')
 const AddEmployee = () => import('@/views/admin/employee/ComAddEmployee.vue')
 const ViewEmployee = () => import('@/views/admin/employee/ComViewEmployee.vue')
 const EditEmployee = () => import('@/views/admin/employee/ComEditEmployee.vue')
+
+const Salary = () => import('@/views/admin/salary/ComAddSalary.vue')
 const routes = [
   {
     path: '/login',
@@ -66,6 +68,12 @@ const routes = [
         path: 'employee/edit/:id',
         name: 'EditEmployee',
         component: EditEmployee,
+      },
+
+      {
+        path: 'salary',
+        name: 'Salary',
+        component: Salary
       }
     ]
   },
