@@ -1,23 +1,26 @@
 <template>
-    <v-container class="fill-height" fluid>
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="8">
-          <v-card class="pa-5">
-            <v-card-title class="text-h5">Employee Dashboard</v-card-title>
-            <v-card-text>
-              Chào mừng bạn đến trang nhân viên!
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
-  </template>
-  
-  <script setup>
-    // Không cần export default khi dùng <script setup>
-  </script>
-  
-  <style scoped>
-  /* Style tuỳ chỉnh nếu muốn */
-  </style>
-  
+  <v-app>
+    <ComSideBarEmp />
+    <v-main class="ml-64 bg-grey-lighten-3">
+      <ComNavBar />
+
+      <!-- ✅ Chỉ hiển thị ComSummary khi đang ở trang Dashboard -->
+      <ComSummaryEmp v-if="isDashboard" />
+
+      <router-view />
+    </v-main>
+  </v-app>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import ComSideBarEmp from '@/views/employee/ComSideBarEmp.vue'
+import ComNavBar from '@/components/ComNavBar.vue'
+import ComSummaryEmp from '@/views/employee/ComSummaryEmp.vue'
+
+const route = useRoute()
+
+// ✅ Kiểm tra xem đang ở Dashboard hay không
+const isDashboard = computed(() => route.path === '/employee-dashboard')
+</script>
