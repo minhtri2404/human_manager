@@ -91,7 +91,14 @@ const routes = [
     path: '/employee-dashboard',
     name: 'EmployeeDashboard',
     component: EmployeeDashboard,
-    meta: { requiresAuth: true, role: 'employee' }
+    meta: { requiresAuth: true, role: 'employee' },
+    children: [
+      {
+        path: 'myProfile/:id',
+        name: 'MyProfile',
+        component: ViewEmployee,  
+      },
+    ]
   },
   
   {

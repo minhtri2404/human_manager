@@ -21,13 +21,21 @@
 </template>
 
 <script setup>
-const items = [
-  { title: "Dashboard", icon: "mdi-view-dashboard", to: "/employee-dashboard" },
-  { title: "My Profile", icon: "mdi-account-group", to: "/admin-employee/myProfile" },
-  { title: "Leaves", icon: "mdi-calendar-month", to: "/admin-employee/leaves" },
-  { title: "Salary", icon: "mdi-currency-usd", to: "/admin-employee/salary" },
-  { title: "Settings", icon: "mdi-cog", to: "/admin-employee/settings" },
-];
+import { computed } from 'vue'
+import { useAuth } from '@/auth/userAuth'
+const { user } = useAuth()
+
+const items = computed(() => {
+  if (!user.value || !user.value._id) return []
+
+  return [
+    { title: "Dashboard", icon: "mdi-view-dashboard", to: "/employee-dashboard" },
+    { title: "My Profile", icon: "mdi-account-group", to: `/employee-dashboard/myProfile/${user.value._id}` },
+    { title: "Leaves", icon: "mdi-calendar-month", to: "/employee-dashboard/leaves" },
+    { title: "Salary", icon: "mdi-currency-usd", to: "/employee-dashboard/salary" },
+    { title: "Settings", icon: "mdi-cog", to: "/employee-dashboard/settings" },
+  ]
+})
 </script>
 
 <style scoped>
