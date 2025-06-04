@@ -44,6 +44,9 @@ app.use('/api/employees', employeeRoute)
 const salaryRoute = require('./src/routes/salaryRoute')
 app.use('/api/salarys', salaryRoute)
 
+const leaveRoute = require('./src/routes/leaveRoute')
+app.use('/api/leaves', leaveRoute)
+
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome' });
 });
