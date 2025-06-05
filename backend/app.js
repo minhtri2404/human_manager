@@ -34,7 +34,7 @@ const startServer = async () => {
     const authRouter = require('./src/routes/authRoute');
     app.use('/api/auth', authRouter);
 
-    //Localhost:4000/api/department
+    //Localhost:4000/api/departments
     const departmentRouter = require('./src/routes/departmentRoute');
     app.use('/api/departments', departmentRouter);
 
@@ -49,6 +49,10 @@ const startServer = async () => {
      //Localhost:4000/api/leaves
     const leaveRoute = require('./src/routes/leaveRoute');
     app.use('/api/leaves', leaveRoute);
+
+    //Localhost:4000/api/settings
+    const settingRoute = require('./src/routes/settingRoute')
+    app.use('/api/settings', settingRoute)
 
     app.get('/', (req, res) => {
       res.json({ message: 'Welcome' });

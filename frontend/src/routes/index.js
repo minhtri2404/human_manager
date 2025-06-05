@@ -19,7 +19,7 @@ const ViewSalary = () => import('@/views/admin/salary/ComViewSalary.vue')
 
 const Leave = () => import('@/views/employee/leaves/ComLeaveList.vue')
 const AddLeave = () => import('@/views/employee/leaves/ComAddLeave.vue')
-
+const Setting = () => import('@/views/employee/ComSetting.vue')
 const routes = [
   {
     path: '/login',
@@ -119,6 +119,12 @@ const routes = [
         path: 'salary/:id',
         name: 'MySalary',
         component: ViewSalary
+      },
+
+      {
+        path: 'settings',
+        name: 'Setting',
+        component: Setting
       },
     ]
   },
