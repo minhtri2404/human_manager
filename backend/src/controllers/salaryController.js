@@ -33,7 +33,7 @@ class SalaryController {
     getSalary = async (req, res) => {
         try {
             const { id } = req.params;
-            
+
             // Tìm bảng lương theo employeeId = id
             let salary = await Salary.find({ employeeId: id })
                 .populate('employeeId', 'employeeId salary'); // tuỳ bạn muốn hiển thị thêm gì
@@ -42,8 +42,6 @@ class SalaryController {
                 const employee = await Employee.findOne({userId: id})
                 salary = await Salary.find({employeeId: employee._id})
                     .populate('employeeId', 'employeeId salary');
-        
-                return res.status(404).json({ success: false, message: 'Không tìm thấy lương cho nhân viên này' });
             }
 
             return res.status(200).json({ success: true, salary });
