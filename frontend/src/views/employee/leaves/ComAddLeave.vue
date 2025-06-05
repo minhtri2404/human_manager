@@ -1,6 +1,6 @@
 <template>
   <v-container class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md">
-    <h2 class="text-2xl font-bold mb-6">Add Employee</h2>
+    <h2 class="text-h5 d-flex justify-center font-weight-bold mb-6">Add Leaves</h2>
 
     <v-form @submit.prevent="handleSubmit" ref="formRef">
       <v-row class="mb-4">
