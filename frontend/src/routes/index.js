@@ -114,6 +114,12 @@ const routes = [
         name: 'AddLeave',
         component: AddLeave,
       },
+
+      {
+        path: 'salary/:id',
+        name: 'MySalary',
+        component: ViewSalary
+      },
     ]
   },
   

@@ -32,7 +32,7 @@ const items = computed(() => {
     { title: "Dashboard", icon: "mdi-view-dashboard", to: "/employee-dashboard" },
     { title: "My Profile", icon: "mdi-account-group", to: `/employee-dashboard/myProfile/${user.value._id}` },
     { title: "Leaves", icon: "mdi-calendar-month", to: "/employee-dashboard/leave" },
-    { title: "Salary", icon: "mdi-currency-usd", to: "/employee-dashboard/salary" },
+    { title: "Salary", icon: "mdi-currency-usd", to: `/employee-dashboard/salary/${user.value._id}` },
     { title: "Settings", icon: "mdi-cog", to: "/employee-dashboard/settings" },
   ]
 })
