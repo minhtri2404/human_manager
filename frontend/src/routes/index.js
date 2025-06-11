@@ -21,6 +21,7 @@ const Leave = () => import('@/views/employee/leaves/ComLeaveList.vue')
 const AddLeave = () => import('@/views/employee/leaves/ComAddLeave.vue')
 const Setting = () => import('@/views/employee/ComSetting.vue')
 const List = () => import('@/views/admin/leaves/ComList.vue')
+const DetailLeave = () => import('@/views/admin/leaves/ComView.vue')
 const routes = [
   {
     path: '/login',
@@ -92,6 +93,12 @@ const routes = [
         path: 'leave',
         name: 'List',
         component: List,
+      },
+
+      {
+        path: 'leave/:id',
+        name: 'DetailLeave',
+        component: DetailLeave,
       },
     ]
   },

@@ -2,6 +2,7 @@ const Leave = require('../models/leaveModel')
 const Employee = require('../models/employeeModel')
 
 class LeaveController {
+    // Thêm đơn xin nghĩ nhân viên
     addLeave = async (req, res) => {
         try {
             const {userId, leaveType, startDate, endDate, reason} = req.body
@@ -23,6 +24,7 @@ class LeaveController {
         }
     }
 
+    // Hiển thị đơn xin nghĩ của nhân viên
     getAllLeave = async (req, res) => {
         try {
             const { id } = req.params;
@@ -40,6 +42,7 @@ class LeaveController {
         }
     }
 
+    // Hiển thị tất cả đơn xin nghĩ nhân viên bên Admin
     getLeave = async(req, res) => {
         try {
             const leaves = await Leave.find().populate({
@@ -56,6 +59,31 @@ class LeaveController {
                     }
                 ]
             })
+            return res.status(200).json({success: true, leaves})
+        } catch (error) {
+            return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
+        }
+    }
+
+    // Thông tin chi tiết đơn xin nghĩ
+    getLeaveDetail = async (req, res) => {
+        try {
+            const {id} = req.params
+            const leaves = await Leave.findById(id).populate({
+                path: "employeeId",
+                populate: [
+                    {
+                        path: 'department',
+                        select: 'dep_name'
+                    },
+
+                    {
+                        path: 'userId',
+                        select: 'name profileImage'
+                    }
+                ]
+            })
+            // console.log('Leave Detail: ', leaves)
             return res.status(200).json({success: true, leaves})
         } catch (error) {
             return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
