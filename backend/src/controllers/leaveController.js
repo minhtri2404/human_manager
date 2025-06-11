@@ -39,5 +39,27 @@ class LeaveController {
             return res.status(500).json({success: false, message: 'Internal server error', error: error.message});
         }
     }
+
+    getLeave = async(req, res) => {
+        try {
+            const leaves = await Leave.find().populate({
+                path: "employeeId",
+                populate: [
+                    {
+                        path: 'department',
+                        select: 'dep_name'
+                    },
+
+                    {
+                        path: 'userId',
+                        select: 'name'
+                    }
+                ]
+            })
+            return res.status(200).json({success: true, leaves})
+        } catch (error) {
+            return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
+        }
+    }
 }
 module.exports = new LeaveController()

@@ -20,6 +20,7 @@ const ViewSalary = () => import('@/views/admin/salary/ComViewSalary.vue')
 const Leave = () => import('@/views/employee/leaves/ComLeaveList.vue')
 const AddLeave = () => import('@/views/employee/leaves/ComAddLeave.vue')
 const Setting = () => import('@/views/employee/ComSetting.vue')
+const List = () => import('@/views/admin/leaves/ComList.vue')
 const routes = [
   {
     path: '/login',
@@ -85,6 +86,12 @@ const routes = [
         path: 'employee/salary/:id',
         name: 'ViewSalary',
         component: ViewSalary
+      },
+
+      {
+        path: 'leave',
+        name: 'List',
+        component: List,
       },
     ]
   },
