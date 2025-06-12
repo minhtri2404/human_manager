@@ -14,6 +14,7 @@
           </v-col>
 
           <v-col cols="12" md="6" class="text-right">
+            <v-btn color="blue" class="mx-1" @click="filterStatus('All')">All</v-btn>
             <v-btn color="orange" class="mx-1" @click="filterStatus('Pending')">Pending</v-btn>
             <v-btn color="green" class="mx-1" @click="filterStatus('Approved')">Approved</v-btn>
             <v-btn color="red" class="mx-1" @click="filterStatus('Rejected')">Rejected</v-btn>
@@ -116,7 +117,7 @@ const fetchLeaves = async () => {
 }
 
 const filterStatus = (status) => {
-  selectedStatus.value = status
+  selectedStatus.value = status === 'All' ? '' : status
 }
 
 const filteredLeaves = computed(() => {

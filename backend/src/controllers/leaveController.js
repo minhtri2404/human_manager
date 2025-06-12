@@ -89,5 +89,20 @@ class LeaveController {
             return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
         }
     }
+
+    //Cập nhật đơn xin nghĩ
+    updateLeave = async (req, res) =>{
+        try {
+            const {id} = req.params
+            const leave = await Leave.findByIdAndUpdate(id, {status: req.body.status}, {new: true})
+            if (!leave) {
+                return res.status(404).json({success: false, message: 'Leave not found'})
+                
+            }
+            return res.status(200).json({success: true, message: 'Leave updated successfully', leave})
+        } catch (error) {
+            return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
+        }
+    }
 }
 module.exports = new LeaveController()

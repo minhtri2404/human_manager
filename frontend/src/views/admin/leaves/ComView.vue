@@ -56,8 +56,8 @@
             </v-col>
             <v-col cols="8">
               <div v-if="leave.status === 'Pending'" class="d-flex" style="gap: 12px">
-                <v-btn color="green" @click="changeStatus('Approved')">Approve</v-btn>
-                <v-btn color="red" @click="changeStatus('Rejected')">Reject</v-btn>
+                <v-btn color="green" @click="changeStatus(leave._id, 'Approved')">Approve</v-btn>
+                <v-btn color="red" @click="changeStatus(leave._id, 'Rejected')">Reject</v-btn>
               </div>
               <div v-else>
                 <v-chip :color="statusColor(leave.status)" dark>{{ leave.status }}</v-chip>
@@ -74,10 +74,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
 const route = useRoute()
+const router = useRouter()
 const id = route.params.id
 const leave = ref(null)
 
@@ -93,6 +94,27 @@ const fetchLeave = async () => {
     }
   } catch (err) {
     alert(err.response?.data?.error || 'Failed to load leave details')
+  }
+}
+
+// Cập nhật đơn xin nghỉ
+const changeStatus = async(id, status) => {
+  try {
+    const res = await axios.put(`http://localhost:4000/api/leaves/${id}`, {status},{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    if (res.data.success) {
+      alert('Duyêt đơn thành công')
+      router.push('/admin-dashboard/leave')
+    }
+  } catch (error) {
+    if (error.response && !error.response.data.success) {
+      alert(error.response.data.error)
+    } else{
+      alert('Lỗi không xác định!')
+    }
   }
 }
 

@@ -10,6 +10,7 @@ router.get('/:id', authMiddleware, leaveController.getAllLeave)
 //Admin
 router.get('/',authMiddleware, leaveController.getLeave)
 router.get('/detail/:id', authMiddleware, leaveController.getLeaveDetail)
+router.put('/:id', authMiddleware, leaveController.updateLeave)
 
 
 module.exports = router;
