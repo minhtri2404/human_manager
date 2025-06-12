@@ -18,7 +18,7 @@
             />
           </v-col>
 
-          <v-col cols="12" md="4" class="text-right" v-if="user?.value?.role !== 'admin'">
+          <v-col cols="12" md="4" class="text-right" v-if="user && user.role !== 'admin'">
             <RouterLink to="/employee-dashboard/add-leave">
               <v-btn color="teal" dark>ADD NEW LEAVE</v-btn>
             </RouterLink>
