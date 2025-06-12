@@ -100,6 +100,12 @@ const routes = [
         name: 'DetailLeave',
         component: DetailLeave,
       },
+
+      {
+        path: 'employee/leave/:id',
+        name: 'AdminLeave',
+        component: Leave,
+      },
     ]
   },
 
@@ -119,7 +125,7 @@ const routes = [
 
       {
         path: 'leave',
-        name: 'Leave',
+        name: 'EmployeeLeave',
         component: Leave,
       },
 

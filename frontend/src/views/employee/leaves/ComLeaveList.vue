@@ -18,7 +18,7 @@
             />
           </v-col>
 
-          <v-col cols="12" md="4" class="text-right">
+          <v-col cols="12" md="4" class="text-right" v-if="user?.value?.role !== 'admin'">
             <RouterLink to="/employee-dashboard/add-leave">
               <v-btn color="teal" dark>ADD NEW LEAVE</v-btn>
             </RouterLink>
@@ -68,11 +68,15 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { useAuth } from '@/auth/userAuth';
+import { useRoute } from 'vue-router'
 
 const { user } = useAuth()
+const route = useRoute()
 const leaves = ref([])
 const loading = ref(false)
 const search = ref('')
+// Lấy ID từ route param nếu có (admin), nếu không thì dùng user._id (user)
+const id = route.params.id || user.value._id
 
 const headers = [
   { text: 'S.No', key: 'sno', width: '60px' },
@@ -88,7 +92,7 @@ const headers = [
 const fetchLeaves = async () => {
   loading.value = true
   try {
-    const res = await axios.get(`http://localhost:4000/api/leaves/${user.value._id}`, {
+    const res = await axios.get(`http://localhost:4000/api/leaves/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

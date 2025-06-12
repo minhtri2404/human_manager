@@ -29,13 +29,15 @@ class LeaveController {
         try {
             const { id } = req.params;
 
-            const employee = await Employee.findOne({ userId: id });
-            
-            if (!employee) {
-            return res.status(404).json({ success: false, message: 'Employee not found for this userId' });
+            let leaves = await Leave.find({ employeeId: id });
+            if (!leaves.length) {
+                // Trường hợp gọi bằng userId
+                const employee = await Employee.findOne({ userId: id });
+                if (employee) {
+                    leaves = await Leave.find({ employeeId: employee._id });
+                }
             }
-
-            const leaves = await Leave.find({ employeeId: employee._id });
+            
             return res.status(200).json({ success: true, leaves });
         } catch (error) {
             return res.status(500).json({success: false, message: 'Internal server error', error: error.message});
