@@ -124,10 +124,8 @@ const formatDate = (dateStr) => {
 
 const statusColor = (status) => {
   switch (status) {
-    case 'Pending': return 'orange'
     case 'Approved': return 'green'
     case 'Rejected': return 'red'
-    default: return 'grey'
   }
 }
 
