@@ -2,6 +2,7 @@ const Department = require('../models/departmentModel')
 
 class DepartmentController {
 
+    // Lấy tất cả phòng ban
     getAllDepartment = async(req, res) => {
         try {
             const departments = await Department.find()
@@ -13,6 +14,7 @@ class DepartmentController {
         }
     }
 
+    // Thêm phòng ban mới
     addDepartment = async(req, res) =>{
         try {
             const {dep_name, description} = req.body
@@ -30,6 +32,7 @@ class DepartmentController {
         }
     }
 
+    // Lấy thông tin phòng ban theo id
     getDepartment = async(req, res) => {
         try {
             const {id} = req.params
@@ -40,7 +43,8 @@ class DepartmentController {
             return res.status(500).json({success: false, error: 'Server error'})
         }
     }
-
+    
+    // Cập nhật thông tin phòng ban
     updateDepartment = async(req, res) => {
         try {
             const {id} = req.params
@@ -59,10 +63,13 @@ class DepartmentController {
         }
     }
 
+    // Xóa phòng ban
     deleteDepartment = async(req, res) => {
         try {
             const {id} = req.params
-            const deleteDep = await Department.findByIdAndDelete(id)
+            const deleteDep = await Department.findById(id)
+
+            await deleteDep.deleteOne()
             return res.status(200).json({success: true, deleteDep})
 
         } catch (error) {
