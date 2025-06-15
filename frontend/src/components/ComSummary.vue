@@ -17,18 +17,42 @@
 </template>
 
 <script setup>
+import axios from 'axios'
+import { ref, onMounted } from 'vue'
 import ComSummaryCard from '@/components/ComSummaryCard.vue'
 
-const overviewCards = [
-  { icon: 'mdi-account-group', text: 'Total Employee', number: 13, color: 'teal-darken-2' },
-  { icon: 'mdi-domain', text: 'Total Department', number: 5, color: 'yellow-darken-2' },
-  { icon: 'mdi-currency-usd', text: 'Monthly Salary', number: '$655', color: 'red-darken-2' },
-]
+const overviewCards = ref([])
+const leaveCards = ref([])
 
-const leaveCards = [
-  { icon: 'mdi-file-document-outline', text: 'Leave Applied', number: 5, color: 'teal-darken-2' },
-  { icon: 'mdi-check-circle', text: 'Leave Approved', number: 2, color: 'yellow-darken-2' },
-  { icon: 'mdi-timer-sand', text: 'Leave Pending', number: 4, color: 'blue-darken-2' },
-  { icon: 'mdi-close-circle', text: 'Leave Rejected', number: 1, color: 'red-darken-2' },
-]
+// Hàm gọi API để lấy dữ liệu tổng quan
+const fetchSummary = async () => {
+  try {
+    const res = await axios.get('http://localhost:4000/api/dashboards/summary', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    const data = res.data
+    // Gán dữ liệu động
+    overviewCards.value = [
+      { icon: 'mdi-account-group', text: 'Total Employee', number: data.totalEmployee, color: 'teal-darken-2' },
+      { icon: 'mdi-domain', text: 'Total Department', number: data.totalDepartment, color: 'blue-darken-2' },
+      { icon: 'mdi-currency-usd', text: 'Monthly Salary', number: `$${data.totalSalarys}`, color: 'red-darken-2' },
+    ]
+
+    leaveCards.value = [
+      { icon: 'mdi-file-document-outline', text: 'Leave Applied', number: data.leaveSummary.appliedFor, color: 'teal-darken-2' },
+      { icon: 'mdi-check-circle', text: 'Leave Approved', number: data.leaveSummary.approved, color: 'green-darken-2' },
+      { icon: 'mdi-timer-sand', text: 'Leave Pending', number: data.leaveSummary.pending, color: 'yellow-darken-2' },
+      { icon: 'mdi-close-circle', text: 'Leave Rejected', number: data.leaveSummary.rejected, color: 'red-darken-2' },
+    ]
+  } catch (error) {
+    if (error.response && !error.response.data.success) {
+      alert(error.response.data.error)
+    } else {
+      alert("Failed to fetch summary")
+    }
+  }
+}
+onMounted(fetchSummary)
 </script>

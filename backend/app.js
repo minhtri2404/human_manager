@@ -54,6 +54,11 @@ const startServer = async () => {
     const settingRoute = require('./src/routes/settingRoute')
     app.use('/api/settings', settingRoute)
 
+    //Localhost:4000/api/dashboards
+    const dashboardRoute = require('./src/routes/dashboardRoute')
+    app.use('/api/dashboards', dashboardRoute)
+
+
     app.get('/', (req, res) => {
       res.json({ message: 'Welcome' });
     });
