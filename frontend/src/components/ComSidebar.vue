@@ -27,7 +27,7 @@ const items = [
   { title: "Departments", icon: "mdi-domain", to: "/admin-dashboard/department" },
   { title: "Leaves", icon: "mdi-calendar-month", to: "/admin-dashboard/leave" },
   { title: "Salarys", icon: "mdi-currency-usd", to: "/admin-dashboard/salary" },
-  { title: "Settings", icon: "mdi-cog", to: "/admin-settings" },
+  { title: "Settings", icon: "mdi-cog", to: "/admin-dashboard/setting" },
 ];
 </script>
 

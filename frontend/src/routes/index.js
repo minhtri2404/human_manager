@@ -106,6 +106,12 @@ const routes = [
         name: 'AdminLeave',
         component: Leave,
       },
+
+      {
+        path: 'setting',
+        name: 'AdminSetting',
+        component: Setting
+      },
     ]
   },
 
