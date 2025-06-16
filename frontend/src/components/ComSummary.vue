@@ -7,12 +7,25 @@
       </v-col>
     </v-row>
 
+    
     <h4 class="text-center text-h6 mt-10">Leave Detail</h4>
     <v-row class="mt-4" dense>
       <v-col cols="12" md="3" v-for="(card, index) in leaveCards" :key="index">
         <ComSummaryCard v-bind="card" />
       </v-col>
     </v-row>
+
+    <!-- Biểu đồ tổng quan -->
+    <h4 class="text-center text-h6 mt-10">Chart Detail</h4>
+    <v-row class="mt-4" dense>
+      <v-col cols="12" md="8" class="mx-auto">
+        <ComChart
+          v-if="summaryReady"
+          :chartValues="chartValues"
+        />
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
@@ -20,9 +33,12 @@
 import axios from 'axios'
 import { ref, onMounted } from 'vue'
 import ComSummaryCard from '@/components/ComSummaryCard.vue'
+import ComChart from '@/components/ComChart.vue'
 
 const overviewCards = ref([])
 const leaveCards = ref([])
+const chartValues = ref([0, 0, 0])
+const summaryReady = ref(false)
 
 // Hàm gọi API để lấy dữ liệu tổng quan
 const fetchSummary = async () => {
@@ -46,6 +62,14 @@ const fetchSummary = async () => {
       { icon: 'mdi-timer-sand', text: 'Leave Pending', number: data.leaveSummary.pending, color: 'yellow-darken-2' },
       { icon: 'mdi-close-circle', text: 'Leave Rejected', number: data.leaveSummary.rejected, color: 'red-darken-2' },
     ]
+
+    // ✅ Cập nhật chartValues
+    chartValues.value = [
+      data.totalEmployee,
+      data.totalDepartment,
+      (data.totalSalarys / 100)
+    ]
+    summaryReady.value = true
   } catch (error) {
     if (error.response && !error.response.data.success) {
       alert(error.response.data.error)
