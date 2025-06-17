@@ -43,11 +43,24 @@
               <td>{{ item.employeeId }}</td>
               <td>{{ item.name }}</td>
               <td>{{ item.department }}</td>
+              <!-- Cột Trạng thái -->
+              <td>
+                <v-chip v-if="item.status" :color="getStatusColor(item.status)" dark small>
+                  {{ item.status }}
+                </v-chip>
+                <span v-else class="text-grey">Chưa chấm</span>
+              </td>
+              <!-- Cột Hành động -->
               <td class="text-center">
-                <v-btn size="small" color="green" @click="markAttendance(item, 'Present')">Present</v-btn>
-                <v-btn size="small" color="red" @click="markAttendance(item, 'Absent')">Absent</v-btn>
-                <v-btn size="small" color="blue" @click="markAttendance(item, 'Sick')">Sick</v-btn>
-                <v-btn size="small" color="orange"  @click="markAttendance(item, 'Leave')">Leave</v-btn>
+                <template v-if="!item.status">
+                  <v-btn size="small" color="green" @click="markAttendance(item.employeeId, 'Present')">Present</v-btn>
+                  <v-btn size="small" color="red" @click="markAttendance(item.employeeId, 'Absent')">Absent</v-btn>
+                  <v-btn size="small" color="blue" @click="markAttendance(item.employeeId, 'Sick')">Sick</v-btn>
+                  <v-btn size="small" color="orange" @click="markAttendance(item.employeeId, 'Leave')">Leave</v-btn>
+                </template>
+                <template v-else>
+                  <span class="text-grey">Đã chấm</span>
+                </template>
               </td>
             </tr>
           </template>
@@ -72,6 +85,7 @@ const headers = [
   { text: 'Mã Nhân Viên', key: 'employeeId' },
   { text: 'Tên', key: 'name' },
   { text: 'Phòng ban', key: 'department' },
+  { text: 'Trạng thái', key: 'status' },
   { text: 'Hành động', key: 'action', sortable: false }
 ];
 
@@ -103,11 +117,42 @@ const fetchAttendance = async () => {
     }
 }
 
+// Hàm đánh dấu trạng thái chấm công
+const markAttendance = async (employeeId, status) => {
+  try {
+    const res = await axios.put(`http://localhost:4000/api/attendances/update/${employeeId}`, {status}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+
+    if (res.data.success) {
+      alert(`Đã chấm công ${status} cho mã nhân viên: ${employeeId}`)
+      fetchAttendance() // Cập nhật lại danh sách chấm công sau khi đánh dấu
+    } else {
+      alert('Failed to mark attendance')
+    }
+  } catch (error) {
+    alert(error.response?.data?.error || 'Error marking attendance')
+  }
+}
+// Lọc theo tên nhân viên
 const filteredAttendance = computed(() =>
   attendance.value.filter(emp =>
     emp.name.toLowerCase().includes(search.value.toLowerCase())
   )
 )
+
+// Đổi màu theo status
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'Present': return 'green'
+    case 'Absent': return 'red'
+    case 'Sick': return 'blue'
+    case 'Leave': return 'orange'
+    default: return 'grey'
+  }
+}
 
 onMounted(fetchAttendance)
 </script>

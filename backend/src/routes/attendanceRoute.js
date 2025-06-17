@@ -5,5 +5,6 @@ const authMiddleware = require('../middleware/authMiddleware')
 const defaultAttendance = require('../middleware/defaultAttendance')
 
 router.get('/', authMiddleware, defaultAttendance, attendanceController.getAllAttendance);
+router.put('/update/:employeeId', authMiddleware, attendanceController.updateAttendance);
 
 module.exports = router;
