@@ -26,6 +26,7 @@ const items = [
   { title: "Employees", icon: "mdi-account-group", to: "/admin-dashboard/employee" },
   { title: "Departments", icon: "mdi-domain", to: "/admin-dashboard/department" },
   { title: "Leaves", icon: "mdi-calendar-month", to: "/admin-dashboard/leave" },
+  { title: "Attendance", icon: "mdi-fingerprint", to: "/admin-dashboard/attendance" },
   { title: "Salarys", icon: "mdi-currency-usd", to: "/admin-dashboard/salary" },
   { title: "Settings", icon: "mdi-cog", to: "/admin-dashboard/setting" },
 ];
