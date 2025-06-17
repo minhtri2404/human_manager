@@ -41,6 +41,49 @@ class AttendanceController {
             return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
         }
     }
+
+    //Hiển thị báo cáo chấm công
+    getAttendanceReport = async(req, res) =>{
+        try {
+            const {date, limit = 5, skip = 0} = req.query;
+            const query = {};
+
+            if(date){
+                query.date = date;
+            }
+
+            const attendance = await Attendance.find(query).populate({
+                path: "employeeId",
+                populate: [
+                    {
+                        path: 'department',
+                        select: 'dep_name'
+                    },
+
+                    {
+                        path: 'userId',
+                        select: 'name'
+                    }
+                ]
+            }).sort({date: -1}).limit(parseInt(limit)).skip(parseInt(skip));
+
+            const groupData = attendance.reduce((result, record) =>{
+                if(!result[record.date]) {
+                    result[record.date] = [];
+                }
+                result[record.date].push({
+                    employeeId: record.employeeId.employeeId,
+                    name: record.employeeId.userId.name,
+                    department: record.employeeId.department.dep_name,
+                    status: record.status || "Not Marked"
+                })
+                return result;
+            },{})
+            return res.status(200).json({success: true, groupData})
+        } catch (error) {
+            return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
+        }
+    }
 }
 
 module.exports = new AttendanceController()
