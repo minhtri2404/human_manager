@@ -47,7 +47,7 @@
     <!-- Các nút hành động -->
     <v-row class="mt-4" justify="center" align="center">
       <v-btn color="primary" class="mr-2" @click="handleLoadMore">Load More</v-btn>
-      <v-btn color="success" @click="exportToExcel">Export to Excel</v-btn>
+      <v-btn color="success" class="ml-2" @click="exportToExcel">Xuất Excel</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -55,7 +55,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 
 const report = ref({})
 const limit = ref(5)
@@ -114,22 +115,67 @@ const formatDate = (inputDate) => {
 }
 
 // Xuất file Excel
-const exportToExcel = () => {
-  const wb = XLSX.utils.book_new()
+const exportToExcel = async () => {
+  const workbook = new ExcelJS.Workbook()
+  const sheet = workbook.addWorksheet('Attendance Report')
 
+  // Dòng tiêu đề
+  sheet.mergeCells('A1', 'E1')
+  sheet.getCell('A1').value = 'BÁO CÁO CHẤM CÔNG'
+  sheet.getCell('A1').alignment = { vertical: 'middle', horizontal: 'center' }
+  sheet.getCell('A1').font = { size: 16, bold: true }
+
+  // Header
+  sheet.addRow(['S.No', 'Mã nhân viên', 'Tên', 'Phòng ban', 'Trạng thái'])
+  sheet.getRow(2).font = { bold: true }
+  sheet.columns = [
+    { key: 'sno', width: 6 },
+    { key: 'employeeId', width: 15 },
+    { key: 'name', width: 20 },
+    { key: 'department', width: 20 },
+    { key: 'status', width: 15 }
+  ]
+
+  // Ghi dữ liệu
+  let rowIndex = 3
   Object.entries(report.value).forEach(([date, records]) => {
-    const formattedRecords = records.map((record, index) => ({
-      'S.No': index + 1,
-      'Mã nhân viên': record.employeeId,
-      'Tên': record.name,
-      'Phòng ban': record.department,
-      'Trạng thái': record.status
-    }))
-    const ws = XLSX.utils.json_to_sheet(formattedRecords)
-    XLSX.utils.book_append_sheet(wb, ws, formatDate(date))
+    sheet.addRow([`Ngày ${formatDate(date)}`])
+    sheet.mergeCells(`A${rowIndex}:E${rowIndex}`)
+    sheet.getCell(`A${rowIndex}`).font = { italic: true }
+    rowIndex++
+
+    records.forEach((record, index) => {
+      sheet.addRow([
+        index + 1,
+        record.employeeId,
+        record.name,
+        record.department,
+        record.status
+      ])
+      rowIndex++
+    })
+
+    // Dòng trống giữa mỗi ngày
+    sheet.addRow([])
+    rowIndex++
   })
 
-  XLSX.writeFile(wb, 'Attendance_Report.xlsx')
+  // Viền bảng
+  sheet.eachRow((row) => {
+    row.eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+    })
+  })
+
+  // Xuất file
+  const buffer = await workbook.xlsx.writeBuffer()
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+  saveAs(blob, `Attendance_Report_${new Date().toISOString().split('T')[0]}.xlsx`)
 }
 
 onMounted(fetchReport)

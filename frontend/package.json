@@ -12,14 +12,15 @@
     "axios": "^1.9.0",
     "chart.js": "^4.5.0",
     "core-js": "^3.8.3",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "human-project": "file:",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
     "vue-chartjs": "^5.3.2",
     "vue-router": "^4.5.1",
     "vuetify": "^3.7.7",
-    "webfontloader": "^1.0.0",
-    "xlsx": "^0.18.5"
+    "webfontloader": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
