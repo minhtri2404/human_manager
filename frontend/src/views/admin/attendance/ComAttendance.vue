@@ -128,7 +128,7 @@ const markAttendance = async (employeeId, status) => {
 
     if (res.data.success) {
       alert(`Đã chấm công ${status} cho mã nhân viên: ${employeeId}`)
-      fetchAttendance() // Cập nhật lại danh sách chấm công sau khi đánh dấu
+       await fetchAttendance() // Cập nhật lại danh sách chấm công sau khi đánh dấu
     } else {
       alert('Failed to mark attendance')
     }

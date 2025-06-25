@@ -68,13 +68,19 @@ class AttendanceController {
             }).sort({date: -1}).limit(parseInt(limit)).skip(parseInt(skip));
 
             const groupData = attendance.reduce((result, record) =>{
+                const emp = record.employeeId;
+                //kiểm tra nếu employeeId bị null hoặc các liên kết bản không đầy đủ thì bỏ qua bản ghi
+                if(!emp || !emp.userId || !emp.department) {
+                    return result;
+                }
+                
                 if(!result[record.date]) {
                     result[record.date] = [];
                 }
                 result[record.date].push({
-                    employeeId: record.employeeId.employeeId,
-                    name: record.employeeId.userId.name,
-                    department: record.employeeId.department.dep_name,
+                    employeeId: record.employeeId.employeeId || "N/A",
+                    name: record.employeeId.userId.name || "Unknown",
+                    department: record.employeeId.department.dep_name || "Unknown",
                     status: record.status || "Not Marked"
                 })
                 return result;

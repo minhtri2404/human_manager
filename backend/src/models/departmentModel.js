@@ -3,6 +3,7 @@ const Employee = require('../models/employeeModel')
 const Leave = require('../models/leaveModel')
 const Salary = require('../models/salaryModel')
 const User = require('../models/userModel')
+const Attendance = require('../models/attendanceModel')
 
 const departmentSchema = new mongoose.Schema({
     dep_name:{type: String, required:true},
@@ -12,7 +13,7 @@ const departmentSchema = new mongoose.Schema({
 
 });
 
-// Khi xóa phòng ban thì xóa luôn nhân viên, nghĩ phép, lương của nhân viên trong phòng ban đó
+// Khi xóa phòng ban thì xóa luôn nhân viên, nghĩ phép, lương, chấm công của nhân viên trong phòng ban đó
 departmentSchema.pre('deleteOne', {document: true, query: false},  async function(next) {
     try {
         // 1. Lấy danh sách nhân viên thuộc phòng ban này
@@ -28,6 +29,7 @@ departmentSchema.pre('deleteOne', {document: true, query: false},  async functio
         // 4. Xoá các bảng liên quan
         await Leave.deleteMany({employeeId: {$in: empId}});
         await Salary.deleteMany({employeeId: {$in: empId}});
+        await Attendance.deleteMany({employeeId: {$in: empId}});
 
         // 5. Xoá tài khoản user liên quan
         await User.deleteMany({ _id: { $in: userId } });
