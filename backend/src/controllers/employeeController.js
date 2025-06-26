@@ -185,8 +185,8 @@ class EmployeeController {
                 await User.findByIdAndDelete(employee.userId)
             }
 
-            //Xóa nhân viên
-            await Employee.findByIdAndDelete(id)
+            /// Xóa nhân viên (đúng cách!)
+            await employee.deleteOne();
             return res.status(200).json({success: true, message: 'Xóa người dùng thành công'})
         } catch (error) {
             return res.status(500).json({success: false, message: 'Internal server error', error: error.message})
